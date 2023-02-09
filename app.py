@@ -15,28 +15,7 @@ app = Flask(__name__)
 
 model = tf.keras.models.load_model('modelVGG.h5')
 
-# def predict(img):
-#     img = image.img_to_array(img)
-#     img = np.expand_dims(img, axis=0)
-#     img = preprocess_input(img)
-#     prediction = model.predict(img)
-#     return prediction
-#
-# @app.route('/predict', methods=['POST'])
-# def predict_route():
-#     try:
-#         img = request.files['image'].read()
-#         prediction = predict(img)
-#         return jsonify({'prediction': prediction.tolist()})
-#     except Exception as e:
-#         return jsonify({'error': str(e)})
-
 def predict_image(image):
-    # Load and preprocess the image
-    # image = cv2.imread(image_path)
-    # image = cv2.imread(image)
-    print(type(image))
-    # image = np.array(image, dtype=np.float32)
     image = cv2.resize(image, (224,224))
     image = np.expand_dims(image, axis=0)
     image = keras.applications.vgg16.preprocess_input(image)
