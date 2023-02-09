@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}"> -->
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Brain Tumor Classifier</a>
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+      <div id="upload">
+        <input type="file" name="image">
+      </div>
+      <div id="select">
+        {% for i in range(5) %}
+          <input type="radio" name="selected_image" value="{{ i }}">
+          <img src="{{ url_for('static', filename='image_' + i|string + '.jpg') }}" alt="Image {{ i }}">
+        {% endfor %}
+      </div>
+      <input type="submit" value="Predict">
+    </form>
+    {% if prediction %}
+      <h2 class="text-white">Prediction: {{ prediction }}</h2>
+      {% if image_data %}
+        <!-- <img src="data:image/jpeg;base64,{{ image_data }}" alt="Brain image"> -->
+      {% endif %}
+    {% endif %}
+  </body>
+</html>
