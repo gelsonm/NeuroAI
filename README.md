@@ -20,7 +20,7 @@ The application utilizes transfer learning with a pre-trained VGG model to extra
 - Keras
 - Numpy
 - OpenCV
-- Pillow
+
 ### Setup
 1. Create a virtual env using 'python -m venv venv'
 2. Clone this repository
