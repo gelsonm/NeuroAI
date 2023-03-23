@@ -7,7 +7,7 @@ This project involves the design and development of a web application for the de
 The application utilizes transfer learning with a pre-trained VGG model to extract features from MRI images, and a custom convolutional neural network (CNN) trained on a large dataset of MRI images to predict the presence of a brain tumor. These deep learning techniques, along with computer vision algorithms, are utilized to improve the accuracy of the tumor detection.
 
 ### Key Features
-- Web application designed and developed using Flask framework
+- Web application designed and developed using FastAPI framework
 - Transfer learning with pre-trained VGG model to extract features from MRI images
 - Custom convolutional neural network (CNN) trained on a large dataset of MRI images for improved accuracy of tumor prediction
 - User-friendly interface with options to either upload their own MRI image or select from a sample set of MRI images
@@ -15,7 +15,7 @@ The application utilizes transfer learning with a pre-trained VGG model to extra
 - Utilization of deep learning techniques and computer vision algorithms to improve the accuracy of the tumor detection
 
 ### Requirements
-- Flask
+- FastAPI
 - TensorFlow
 - Keras
 - Numpy
@@ -25,7 +25,7 @@ The application utilizes transfer learning with a pre-trained VGG model to extra
 1. Create a virtual env using 'python -m venv venv'
 2. Clone this repository
 3. Install the required packages using 'pip install -r requirements.txt'
-4. Run the application using 'python app.py'
-5. Access the web app at 'http://localhost:5000' in your web browser.
+4. Run the application using 'uvicorn app:app --reload'
+5. Access the web app at 'http://localhost:8000' in your web browser.
 
 
