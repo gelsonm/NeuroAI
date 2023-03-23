@@ -1,4 +1,7 @@
-from flask import Flask,request,jsonify,render_template
+from fastapi import FastAPI, File, UploadFile, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = ""
@@ -11,7 +14,9 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 import cv2
 import base64
 
-app = Flask(__name__)
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 model = tf.keras.models.load_model('modelVGG.h5')
 
@@ -28,39 +33,32 @@ def predict_image(image):
 
     return class_label
 
-@app.route('/', methods=['GET', 'POST'])
-def predict():
+@app.post('/')
+async def predict(request: Request, selected_image: str = None, image: UploadFile = File(...)):
     prediction = ''
 
-    if request.method == 'POST':
-        selected_image = request.form.get('selected_image')
-        if selected_image is not None:
-            # Load the selected predefined image
-            with open('static/image_' + selected_image + '.jpg', 'rb') as f:
-                image_data = f.read()
-                image_data = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_UNCHANGED)
-                # image = np.fromstring(image_data, np.uint8)
-                # image = cv2.imdecode(image, cv2.IMREAD_UNCHANGED)
+    if image is None:
+        # Load the selected predefined image
+        with open('static/image_' + selected_image + '.jpg', 'rb') as f:
+            image_data = f.read()
+            image_data = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_UNCHANGED)
 
-        else:
-            # Get the uploaded image
-            image = request.files['image']
-            # Read the image data from the FileStorage object
-            np_image = np.fromstring(image.read(), np.uint8)
+    else:
+        # Read the image data from the FileStorage object
+        contents = await image.read()
+        np_image = np.frombuffer(contents, np.uint8)
 
-            # Decode the image data into a OpenCV image
-            image_data = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+        # Decode the image data into a OpenCV image
+        image_data = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
 
-        # Perform prediction
-        prediction = predict_image(image_data)
+    # Perform prediction
+    prediction = predict_image(image_data)
 
-        # Encode the image as a base64-encoded string
-        image_data = base64.b64encode(image_data).decode('utf-8')
-        # print('Image',image_data)
-        # print('Image_Type',type(image_data))
-        return render_template('index.html', prediction=prediction, image_data=image_data)
+    # Encode the image as a base64-encoded string
+    image_data = base64.b64encode(cv2.imencode('.jpg', image_data)[1]).decode('utf-8')
 
-    return render_template('index.html',prediction='')
+    return templates.TemplateResponse("index.html", {"request": request, "prediction": prediction, "image_data": image_data})
 
-if __name__ == '__main__':
-    app.run()
+@app.get("/")
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "prediction": ''})
