@@ -28,4 +28,12 @@ The application utilizes transfer learning with a pre-trained VGG model to extra
 4. Run the application using 'uvicorn app:app --reload'
 5. Access the web app at 'http://localhost:8000' in your web browser.
 
+### Output
+1. Homepage:
+![output-base](https://user-images.githubusercontent.com/37416550/232528459-9ea6288b-95cf-4e93-9dfc-6af6443ac08f.png)
+
+2. After user chooses/uploads the brain MRI, the result of classification is displayed:
+![output-prediction](https://user-images.githubusercontent.com/37416550/232529239-b86dd798-1b18-4eb3-8986-6762993f853c.png)
+
+
 
