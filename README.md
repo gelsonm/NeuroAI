@@ -1,4 +1,5 @@
 ## NeuroAI
+![output-base](https://user-images.githubusercontent.com/37416550/232529746-06b0ddd0-2348-4bc6-8cf9-8245aa59033d.png)
 
 ### Brain Tumor Detection Web App
 
